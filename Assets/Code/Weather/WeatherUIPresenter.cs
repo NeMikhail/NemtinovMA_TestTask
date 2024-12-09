@@ -185,6 +185,7 @@ namespace Weather
             Sprite iconSprite = 
                 Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.zero);
             _iconsCache.Add(iconUrl, iconSprite);
+            request.Dispose();
             image.sprite = iconSprite;
         }
     }

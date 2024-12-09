@@ -7,4 +7,5 @@ public class PrefabsContainer : ScriptableObject
 {
     public GameObject ScenePrefab;
     public GameObject DayButtonPrefab;
+    public GameObject DogButtonPrefab;
 }

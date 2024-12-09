@@ -3,6 +3,7 @@ using UnityEngine;
 using Zenject;
 using Weather;
 using Web;
+using DogFacts;
 
 namespace Core
 {
@@ -18,24 +19,15 @@ namespace Core
             _presenters = presenters;
         }
 
-        public GameFactory()
-        {
-            
-        }
-
-        public GameFactory(Presenters presenters)
-        {
-            _presenters = presenters;
-            Init();
-        }
-
         public void Init()
         {
             InitializeWebModule();
             InitializeScene();
             InitializeWeatherModule();
+            InitializeDogsModule();
             InitializeLoadingScreenModule();
         }
+
 
         private void InitializeWebModule()
         {
@@ -57,6 +49,14 @@ namespace Core
             _presenters.Add(weatherPresenter);
             WeatherUIPresenter weatherUIPresenter = _di.Resolve<WeatherUIPresenter>();
             _presenters.Add(weatherUIPresenter);
+        }
+
+        private void InitializeDogsModule()
+        {
+            DogFactsPresenter dogFactsPresenter = _di.Resolve<DogFactsPresenter>();
+            _presenters.Add(dogFactsPresenter);
+            DogFactsUIPresenter dogFactsUIPresenter = _di.Resolve<DogFactsUIPresenter>();
+            _presenters.Add(dogFactsUIPresenter);
         }
 
         private void InitializeLoadingScreenModule()

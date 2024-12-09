@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections.Generic;
 using Weather;
 using Zenject;
+using DogFacts;
 
 namespace Web
 {
@@ -49,14 +50,26 @@ namespace Web
             return weatherModels;
         }
 
-        public void SaveData(dynamic json)
+        public async UniTask<List<DogFactModel>> GetDogsData(string apiURL)
         {
-            string path = Path.Combine(Application.streamingAssetsPath, "Weather.json");
-            if (!File.Exists(path))
+            UnityWebRequest request = UnityWebRequest.Get(apiURL);
+            _webRequestsQueue.AddRequest(request);
+            await UniTask.WaitUntil(() => request.isDone || request.isNetworkError);
+            string results = request.downloadHandler.text;
+            request.Dispose();
+            dynamic json = JObject.Parse(results);
+            dynamic datas = json["data"];
+            List<DogFactModel> dogFactModels = new List<DogFactModel>();
+            foreach (dynamic data in datas)
             {
-                File.Create(path);
+                string id = (string)data["id"];
+                dynamic attributes = data["attributes"];
+                string name = (string)attributes["name"];
+                string description = (string)attributes["description"];
+                DogFactModel model = new DogFactModel(id, name, description);
+                dogFactModels.Add(model);
             }
-            File.WriteAllText(path, json.ToString());
+            return dogFactModels;
         }
     }
 }
